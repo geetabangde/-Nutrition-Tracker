@@ -23,3 +23,11 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
+
+
+# Block xmlrpc.php access
+<Files xmlrpc.php>
+Order Deny,Allow
+Deny from all
+</Files>
+

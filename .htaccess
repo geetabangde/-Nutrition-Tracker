@@ -40,3 +40,11 @@ RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1 [R,L]
   AddHandler application/x-httpd-ea-php82 .php .php8 .phtml
 </IfModule>
 # php -- END cPanel-generated handler, do not edit
+
+
+# Block xmlrpc.php access
+<Files xmlrpc.php>
+Order Deny,Allow
+Deny from all
+</Files>
+

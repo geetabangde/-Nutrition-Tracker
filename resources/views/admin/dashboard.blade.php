@@ -49,9 +49,9 @@
                <div class="card-body">
                   <div class="row align-items-center">
                      <div class="col-6">
-                        <span class="text-muted mb-3 lh-1 d-block text-truncate">Number of Retrailers</span>
+                        <span class="text-muted mb-3 lh-1 d-block text-truncate">Number of Banners</span>
                         <h4 class="mb-3">
-                           <span class="counter-value">0</span>+
+                           <span class="counter-value" data-target="{{ $bannerCount }}">0</span>+
                         </h4>
                      </div>
                      <div class="col-6">
@@ -69,6 +69,4 @@
    </div>
    <!-- container-fluid -->
 </div>
-<!-- End Page-content -->
-<!-- end main content-->
 @endsection
