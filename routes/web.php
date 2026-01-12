@@ -8,8 +8,6 @@ use App\Http\Middleware\CheckRole;
 
 // Home route
 Route::get('/', fn() => view('welcome'));
-
-// ================= LOGIN / LOGOUT ================= //
 Route::prefix('admin')->group(function () {
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('admin.login');
     Route::post('/login', [LoginController::class, 'login'])->name('admin.login.submit');
@@ -25,6 +23,5 @@ Route::middleware(['auth:admin', CheckRole::class . ':1,'])->group(function () {
     Route::put('/banners/{id}', [BannerController::class, 'update'])->name('admin.banners.update');
     Route::delete('/banners/{id}', [BannerController::class, 'destroy'])->name('admin.banners.destroy');
 });
-
 
  

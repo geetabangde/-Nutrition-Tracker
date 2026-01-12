@@ -12,14 +12,10 @@ class CheckRole
     {
         $user = Auth::guard('admin')->user();
 
-        // Debug: check user object
-        // dd($user, $roles);  // <-- yahi line add karo
-
         if (!$user) {
             return redirect()->route('admin.login');
         }
-
-        // Convert roles to integers for comparison
+        
         $roles = array_map('intval', $roles);
 
         if (!in_array($user->role_id, $roles)) {

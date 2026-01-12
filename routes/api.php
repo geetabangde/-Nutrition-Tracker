@@ -20,6 +20,5 @@ Route::middleware(['auth:sanctum'])->group(function (){
     Route::post('update-profile', [ApiController::class, 'updateProfile']);
     // banner api list
     Route::get('banners', [BannerController::class, 'banners']);
-
 });
 

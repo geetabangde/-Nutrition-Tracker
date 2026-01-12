@@ -19,8 +19,6 @@ class ApiController extends Controller
     {
         return response()->json(['message' => 'API is working!']);
     }
-
-  // ✅ Routes
     public function register(Request $request)
    {   
     $validator = Validator::make($request->all(), [
@@ -64,10 +62,7 @@ class ApiController extends Controller
         'user' => $user
     ], 201);
    }
-
-
-
-   // ✅ Verify OTP 
+    // ✅ Verify OTP 
     public function verifyOtp(Request $request)
    {
         $request->validate([
@@ -98,7 +93,7 @@ class ApiController extends Controller
         ]);
     }
 
-    // ✅ Login with Mobile (Naya Token Generate Hoga)
+    // ✅ Login with Mobile 
     public function loginWithMobile(Request $request)
    {
         $validator = Validator::make($request->all(), [
@@ -157,8 +152,7 @@ class ApiController extends Controller
                 'message' => 'Unauthorized user'
             ], 401);
         }
-
-        // 📝 Fields that can be updated
+        
         $updatableFields = [
             'name', 'email', 'mobile_number',
         ];
@@ -193,8 +187,6 @@ class ApiController extends Controller
         ], 200);
     }
 
-   
-
     public function logout(Request $request){
         $user = User::where('id',$request->user()->id)->first();
         if($user){
@@ -208,11 +200,4 @@ class ApiController extends Controller
             ],404);
         }
     }
-
-    
-
 }
-
-
-
-

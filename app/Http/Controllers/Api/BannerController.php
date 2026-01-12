@@ -27,8 +27,7 @@ public function banners(Request $request)
         }
         return $banner;
     });
-
-
+    
     return response()->json([
         'status'  => true,
         'banners' => $banners

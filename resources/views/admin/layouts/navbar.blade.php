@@ -4,7 +4,7 @@
             <!-- LOGO -->
             <div class="navbar-brand-box">
                 <a href="#" class="logo logo-dark">
-                    
+
                     <span class="logo-lg">
                         <img src="" alt="" height="24"> <span class="logo-txt">Nutrition Tracker</span>
                     </span>
