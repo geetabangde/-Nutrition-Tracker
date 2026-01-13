@@ -23,6 +23,19 @@
                          <span data-key="t-banners">Banners</span>
                      </a>
                  </li>
+                 <li>
+                     <a href="{{ route('admin.children.index') }}">
+                         <i data-feather="users"></i>
+                         <span data-key="t-children">Children</span>
+                     </a>
+                 </li>
+                 <!-- Beneficiaries -->
+                 <li>
+                     <a href="{{ route('admin.beneficiaries.index') }}">
+                         <i data-feather="heart"></i>
+                         <span data-key="t-beneficiaries">Beneficiaries</span>
+                     </a>
+                 </li>
              </ul>
              <!-- Sidebar -->
          </div>

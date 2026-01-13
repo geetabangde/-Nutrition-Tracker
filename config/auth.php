@@ -79,7 +79,7 @@ return [
             'model' => App\Models\User::class,
         ],
 
-        'admins' => [ // ✅ Admin provider define kiya
+        'admins' => [ 
             'driver' => 'eloquent',
             'model' => App\Models\Admin::class,
         ],

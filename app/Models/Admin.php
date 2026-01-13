@@ -42,15 +42,15 @@ class Admin extends Authenticatable
     {
         $roles = [
             1 => 'Admin',
-            2 => 'Retailer',
-            3 => 'Manufacturer',
+            2 => 'State Manager',
+            3 => 'Regional Manager',
+            4 => 'Project Manager',
+            5 => 'Anganwadi Operator',
+
         ];
 
         return $roles[$this->role_id] ?? 'Unknown';
     }
-    public function brands()
-   {
-      return $this->hasMany(Brand::class, 'manufacturer_id', 'id');
-   }
+    
 
 }

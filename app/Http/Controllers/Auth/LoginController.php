@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Models\Admin; // ✅ Ensure this line is present
+use App\Models\Admin; 
 
 
 
@@ -33,29 +33,23 @@ class LoginController extends Controller
           // Find user by email first
          $user = Admin::where('email', $request->email)->first();
 
-        //     if($user) {
-        //     dd([
-        //         'user' => $user,
-        //         'password_input' => $request->password,
-        //         'check_password' => Hash::check($request->password, $user->password),
-        //     ]);
-        // } else {
-        //     dd('No user found with this email');
-        // }
-
+        
         // Attempt login using admin guard (covers all roles)
             if (Auth::guard('admin')->attempt($request->only('email', 'password'))) {
                 $user = Auth::guard('admin')->user();
-                // Hashing password for security reasons
 
                 // Role-based redirect
                 switch ($user->role_id) {
                     case 1:
                         return redirect()->route('admin.dashboard');
                     case 2:
-                        return redirect()->route('retailer.dashboard');
+                        return redirect()->route('state.manager.dashboard');
                     case 3:
-                        return redirect()->route('manufacturer.dashboard');
+                        return redirect()->route('regional.manager.dashboard');
+                    case 4:
+                        return redirect()->route('project.manager.dashboard');
+                    case 5:
+                        return redirect()->route('anganwadi.operator.dashboard');
                     default:
                         Auth::guard('admin')->logout();
                         return back()->withErrors(['email' => 'Unauthorized role.']);
