@@ -45,14 +45,22 @@ class AnganwadiOperatorController extends Controller
     // List
     public function listAnganwadiOperators()
     {
-        $anganwadiOperators = Admin::where('role_id', 5)->get();
-        $projectManagers = Admin::where('role_id', 4)->get();
+        $anganwadiOperators = Admin::where('role_id', 5)->get(); // Anganwadi
+        $projectManagers    = Admin::where('role_id', 4)->get(); // Project
+        $regionalManagers   = Admin::where('role_id', 3)->get(); // Regional
+        $stateManagers      = Admin::where('role_id', 2)->get(); // State
 
         return view(
             'admin.anganwadi-operator.list',
-            compact('anganwadiOperators', 'projectManagers')
+            compact(
+                'anganwadiOperators',
+                'projectManagers',
+                'regionalManagers',
+                'stateManagers'
+            )
         );
     }
+
 
     // Edit
     public function editAnganwadiOperator($id)

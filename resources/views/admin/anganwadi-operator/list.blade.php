@@ -35,6 +35,8 @@
                             <thead>
                                 <tr>
                                     <th>S.No.</th>
+                                    <th>State</th>
+                                    <th>Regional Manager</th>
                                     <th>Project Manager</th>
                                     <th>Name</th>
                                     <th>Email</th>
@@ -42,28 +44,51 @@
                                     <th>Actions</th>
                                 </tr>
                             </thead>
+
                             <tbody>
                                 @foreach($anganwadiOperators as $m)
+                                @php
+                                // Project Manager
+                                $project = $projectManagers->firstWhere('id', $m->project_id);
+
+                                // Regional Manager
+                                $regional = $project
+                                ? $regionalManagers->firstWhere('id', $project->regional_id)
+                                : null;
+
+                                // State Manager
+                                $state = $regional
+                                ? $stateManagers->firstWhere('id', $regional->state_id)
+                                : null;
+                                @endphp
+
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>
-                                        @php
-                                            $regional = $projectManagers->firstWhere('id', $m->project_id);
-                                        @endphp
-                                        {{ $regional ? $regional->name : 'N/A' }}
-                                    </td>
+
+                                    <td>{{ $state ? $state->name : 'N/A' }}</td>
+
+                                    <td>{{ $regional ? $regional->name : 'N/A' }}</td>
+
+                                    <td>{{ $project ? $project->name : 'N/A' }}</td>
+
                                     <td>{{ $m->name }}</td>
                                     <td>{{ $m->email }}</td>
                                     <td>{{ $m->mobile_number }}</td>
+
                                     <td>
                                         <a href="{{ route('admin.anganwadi-operator.edit', $m->id) }}"
-                                            class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></a>
-                                        <form action="{{ route('admin.anganwadi-operator.delete', $m->id) }}" method="POST"
-                                            style="display:inline-block;">
+                                            class="btn btn-sm btn-primary">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+
+                                        <form action="{{ route('admin.anganwadi-operator.delete', $m->id) }}"
+                                            method="POST" style="display:inline-block;">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')"><i
-                                                    class="fas fa-trash"></i></button>
+                                            <button type="submit" class="btn btn-sm btn-danger"
+                                                onclick="return confirm('Are you sure?')">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
                                         </form>
                                     </td>
                                 </tr>
