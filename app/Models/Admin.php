@@ -17,7 +17,11 @@ class Admin extends Authenticatable
         'email',
         'password',
         'role_id',
+        'mobile_number',
         'address',
+        'state_id',
+        'regional_id',
+        'project_id',
     ];
 
     protected $hidden = [
@@ -46,7 +50,6 @@ class Admin extends Authenticatable
             3 => 'Regional Manager',
             4 => 'Project Manager',
             5 => 'Anganwadi Operator',
-
         ];
 
         return $roles[$this->role_id] ?? 'Unknown';

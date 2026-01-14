@@ -6,11 +6,11 @@
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                    <h4 class="mb-sm-0 font-size-18">Beneficiaries (Health Records)</h4>
+                    <h4 class="mb-sm-0 font-size-18">Health Records</h4>
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
                             <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                            <li class="breadcrumb-item active">Beneficiaries</li>
+                            <li class="breadcrumb-item active">Health Records</li>
                         </ol>
                     </div>
                 </div>
@@ -22,12 +22,12 @@
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <div>
-                            <h4 class="card-title">📋 Beneficiaries List</h4>
+                            <h4 class="card-title">📋 Health Records List</h4>
                         </div>
-                        <a href="{{ route('admin.beneficiaries.create') }}" class="btn btn-primary"
+                        <!-- <a href="{{ route('admin.beneficiaries.create') }}" class="btn btn-primary"
                            style="background-color: #38e079; color: white; border: none;">
                             <i class="fas fa-plus"></i> Add
-                        </a>
+                        </a> -->
                     </div>
 
                     <div class="card-body">
@@ -57,10 +57,10 @@
                                     <td>{{ $beneficiary->muac ?? '-' }}</td>
                                     <td>{{ $beneficiary->bilateral_pitting_edema ? 'Yes' : 'No' }}</td>
                                     <td>
-                                        <a href="{{ route('admin.beneficiaries.edit', $beneficiary->id) }}"
+                                        <!-- <a href="{{ route('admin.beneficiaries.edit', $beneficiary->id) }}"
                                            class="btn btn-sm btn-warning">
                                            <i class="fas fa-edit"></i>
-                                        </a>
+                                        </a> -->
                                         <form action="{{ route('admin.beneficiaries.destroy', $beneficiary->id) }}"
                                               method="POST" class="d-inline">
                                             @csrf

@@ -18,4 +18,6 @@ class AdminDashboardController extends Controller
         $bannerCount = Banner::count();
         return view('admin.dashboard', compact('userCount', 'bannerCount'));
     }
+
+    
 }

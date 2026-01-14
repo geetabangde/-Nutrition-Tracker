@@ -8,8 +8,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Admin; 
 
-
-
 class LoginController extends Controller
 {
 
@@ -43,13 +41,13 @@ class LoginController extends Controller
                     case 1:
                         return redirect()->route('admin.dashboard');
                     case 2:
-                        return redirect()->route('state.manager.dashboard');
+                        return redirect()->route('state-manager.dashboard');
                     case 3:
-                        return redirect()->route('regional.manager.dashboard');
+                        return redirect()->route('regional-manager.dashboard');
                     case 4:
-                        return redirect()->route('project.manager.dashboard');
+                        return redirect()->route('project-manager.dashboard');
                     case 5:
-                        return redirect()->route('anganwadi.operator.dashboard');
+                        return redirect()->route('anganwadi-operator.dashboard');
                     default:
                         Auth::guard('admin')->logout();
                         return back()->withErrors(['email' => 'Unauthorized role.']);
