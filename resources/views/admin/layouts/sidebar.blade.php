@@ -4,7 +4,7 @@
 
          <!--- Sidemenu -->
          <div id="sidebar-menu" class="pt-4">
-             <!-- Left Menu Start -->
+            
             @php
                 $user = Auth::guard('admin')->user();
             @endphp
@@ -19,15 +19,16 @@
                     </a>
                 </li>
 
-                {{-- ADMIN ONLY --}}
+                {{-- Only Super Admin --}}
                 @if($user && $user->role_id == 1)
                     <li><a href="{{ route('admin.banners.index') }}"><i data-feather="image"></i><span>Banners</span></a></li>
                     <li><a href="{{ route('admin.children.index') }}"><i data-feather="users"></i><span>Children</span></a></li>
                     <li><a href="{{ route('admin.beneficiaries.index') }}"><i data-feather="heart"></i><span>Health Records</span></a></li>
+                    <li><a href="{{ route('admin.videos.index') }}"><i data-feather="video"></i><span>Videos</span></a></li>
                 @endif
 
                 {{-- MASTER (Admin + Managers) --}}
-                @if(in_array($user->role_id, [1,2,3,4]))
+                @if($user && in_array($user->role_id, [1,2,3,4]))
                     <li>
                         <a href="javascript:void(0);" class="has-arrow">
                             <i data-feather="settings"></i>
@@ -35,25 +36,28 @@
                         </a>
 
                         <ul class="sub-menu">
+
                             @if($user->role_id == 1)
-                                <li><a href="{{ route('admin.state-manager.list') }}"><span>State Manager</span></a></li>
+                                <li><a href="{{ route('admin.state-manager.list') }}">State Manager</a></li>
                             @endif
 
                             @if(in_array($user->role_id, [1,2]))
-                                <li><a href="{{ route('admin.regional-manager.list') }}"><span>Regional Manager</span></a></li>
+                                <li><a href="{{ route('admin.regional-manager.list') }}">Regional Manager</a></li>
                             @endif
 
                             @if(in_array($user->role_id, [1,2,3]))
-                                <li><a href="{{ route('admin.project-manager.list') }}"><span>Project Manager</span></a></li>
+                                <li><a href="{{ route('admin.project-manager.list') }}">Project Manager</a></li>
                             @endif
 
                             @if(in_array($user->role_id, [1,2,3,4]))
-                                <li><a href="{{ route('admin.anganwadi-operator.list') }}"><span>Anganwadi Manager</span></a></li>
+                                <li><a href="{{ route('admin.anganwadi-operator.list') }}">Anganwadi Manager</a></li>
                             @endif
+
                         </ul>
                     </li>
                 @endif
             </ul>
+
              <!-- Sidebar -->
          </div>
      </div>

@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\Backend\BannerController;
 use App\Http\Controllers\Backend\ChildController;
 use App\Http\Controllers\Backend\BeneficiaryController;
+use App\Http\Controllers\Backend\VideoController;
 use App\Http\Controllers\Backend\StateManagerController;
 use App\Http\Controllers\Backend\RegionalManagerController;
 use App\Http\Controllers\Backend\ProjectManagerController;
@@ -13,95 +14,143 @@ use App\Http\Controllers\Backend\AnganwadiOperatorController;
 use App\Http\Controllers\StateManagerDashboardController;
 use App\Http\Controllers\RegionalManagerDashboardController;
 use App\Http\Controllers\ProjectManagerDashboardController;
-use App\Http\Controllers\AnganwadiOperatorDashboardController;
-use App\Http\Middleware\CheckRole;
 
 // Home route
 Route::get('/', fn() => view('welcome'));
+
+// Admin Login Routes (No Auth Required)
 Route::prefix('admin')->group(function () {
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('admin.login');
     Route::post('/login', [LoginController::class, 'login'])->name('admin.login.submit');
     Route::get('/logout', [LoginController::class, 'logout'])->name('admin.logout');
 });
 
-Route::middleware(['auth:admin', CheckRole::class . ':1,'])->group(function () {
+// All Admin Authenticated Routes
+Route::middleware(['auth:admin'])->group(function () {
+    
+    // Dashboard - Accessible by all roles
     Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
-    //banner routes
-    Route::get('/banners', [BannerController::class, 'index'])->name('admin.banners.index');
-    Route::get('/banners/create', [BannerController::class, 'create'])->name('admin.banners.create');
-    Route::post('/banners', [BannerController::class, 'store'])->name('admin.banners.store');
-    Route::get('/banners/{id}/edit', [BannerController::class, 'edit'])->name('admin.banners.edit');
-    Route::put('/banners/{id}', [BannerController::class, 'update'])->name('admin.banners.update');
-    Route::delete('/banners/{id}', [BannerController::class, 'destroy'])->name('admin.banners.destroy');
-
-    //child 
-    Route::get('/children', [ChildController::class, 'index'])->name('admin.children.index');
-    Route::get('/children/create', [ChildController::class, 'create'])->name('admin.children.create');
-    Route::post('/children', [ChildController::class, 'store'])->name('admin.children.store');
-    Route::get('/children/{id}/edit', [ChildController::class, 'edit'])->name('admin.children.edit');
-    Route::put('/children/{id}', [ChildController::class, 'update'])->name('admin.children.update');
-    Route::delete('/children/{id}', [ChildController::class, 'destroy'])->name('admin.children.destroy');
-
-    // beneficiary 
-    Route::get('/beneficiaries', [BeneficiaryController::class, 'index'])->name('admin.beneficiaries.index');
-    Route::get('/beneficiaries/create', [BeneficiaryController::class, 'create'])->name('admin.beneficiaries.create');
-    Route::post('/beneficiaries', [BeneficiaryController::class, 'store'])->name('admin.beneficiaries.store');
-    Route::get('/beneficiaries/{id}/edit', [BeneficiaryController::class, 'edit'])->name('admin.beneficiaries.edit');
-    Route::put('/beneficiaries/{id}', [BeneficiaryController::class, 'update'])->name('admin.beneficiaries.update');
-    Route::delete('/beneficiaries/{id}', [BeneficiaryController::class, 'destroy'])->name('admin.beneficiaries.destroy');
     
-    // state-manager
-    Route::get('/admin/state-manager', [StateManagerController::class, 'listStateManager'])->name('admin.state-manager.list');
-    Route::delete('/admin/state-manager/{id}', [StateManagerController::class,'deleteStateManager'])->name('admin.state-manager.delete');
-    Route::get('/admin/state-manager/create', [StateManagerController::class,'createStateManager'])->name('admin.state-manager.create'); 
-    Route::post('/admin/state-manager/create', [StateManagerController::class,'storeStateManager'])->name('admin.state-manager.store');
-    Route::get('/admin/state-manager', [StateManagerController::class, 'listStateManagers'])->name('admin.state-manager.list');
-    Route::delete('/admin/state-manager/{id}', [StateManagerController::class,'deleteStateManager'])->name('admin.state-manager.delete'); 
-    Route::get('/admin/state-manager/{id}/edit', [StateManagerController::class,'editStateManager'])->name('admin.state-manager.edit');
-    Route::put('/admin/state-manager/{id}', [StateManagerController::class,'updateStateManager'])->name('admin.state-manager.update');
+    // ============================================
+    // SUPER ADMIN ONLY (Role ID: 1)
+    // ============================================
+    Route::middleware(['role:1'])->group(function () {
+        
+        // Banner Routes
+        Route::prefix('banners')->name('admin.banners.')->group(function () {
+            Route::get('/', [BannerController::class, 'index'])->name('index');
+            Route::get('/create', [BannerController::class, 'create'])->name('create');
+            Route::post('/', [BannerController::class, 'store'])->name('store');
+            Route::get('/{id}/edit', [BannerController::class, 'edit'])->name('edit');
+            Route::put('/{id}', [BannerController::class, 'update'])->name('update');
+            Route::delete('/{id}', [BannerController::class, 'destroy'])->name('destroy');
+        });
+
+        // Children Routes
+        Route::prefix('children')->name('admin.children.')->group(function () {
+            Route::get('/', [ChildController::class, 'index'])->name('index');
+            Route::get('/create', [ChildController::class, 'create'])->name('create');
+            Route::post('/', [ChildController::class, 'store'])->name('store');
+            Route::get('/{id}/edit', [ChildController::class, 'edit'])->name('edit');
+            Route::put('/{id}', [ChildController::class, 'update'])->name('update');
+            Route::delete('/{id}', [ChildController::class, 'destroy'])->name('destroy');
+        });
+
+        // Beneficiary Routes
+        Route::prefix('beneficiaries')->name('admin.beneficiaries.')->group(function () {
+            Route::get('/', [BeneficiaryController::class, 'index'])->name('index');
+            Route::get('/create', [BeneficiaryController::class, 'create'])->name('create');
+            Route::post('/', [BeneficiaryController::class, 'store'])->name('store');
+            Route::get('/{id}/edit', [BeneficiaryController::class, 'edit'])->name('edit');
+            Route::put('/{id}', [BeneficiaryController::class, 'update'])->name('update');
+            Route::delete('/{id}', [BeneficiaryController::class, 'destroy'])->name('destroy');
+        });
+
+        // Video Routes
+        Route::prefix('videos')->name('admin.videos.')->group(function () {
+            Route::get('/', [VideoController::class, 'index'])->name('index');
+            Route::get('/create', [VideoController::class, 'create'])->name('create');
+            Route::post('/', [VideoController::class, 'store'])->name('store');
+            Route::get('/{id}/edit', [VideoController::class, 'edit'])->name('edit');
+            Route::put('/{id}', [VideoController::class, 'update'])->name('update');
+            Route::delete('/{id}', [VideoController::class, 'destroy'])->name('destroy');
+        });
+
+        // State Manager Routes (Admin Only)
+        Route::prefix('admin/state-manager')->name('admin.state-manager.')->group(function () {
+            Route::get('/', [StateManagerController::class, 'listStateManagers'])->name('list');
+            Route::get('/create', [StateManagerController::class, 'createStateManager'])->name('create');
+            Route::post('/create', [StateManagerController::class, 'storeStateManager'])->name('store');
+            Route::get('/{id}/edit', [StateManagerController::class, 'editStateManager'])->name('edit');
+            Route::put('/{id}', [StateManagerController::class, 'updateStateManager'])->name('update');
+            Route::delete('/{id}', [StateManagerController::class, 'deleteStateManager'])->name('delete');
+        });
+    });
+
+    // ============================================
+    // ADMIN + STATE MANAGER (Role IDs: 1, 2)
+    // ============================================
+    Route::middleware(['role:1,2'])->group(function () {
+        // Regional Manager Routes
+        Route::prefix('admin/regional-manager')->name('admin.regional-manager.')->group(function () {
+            Route::get('/', [RegionalManagerController::class, 'listRegionalManagers'])->name('list');
+            Route::get('/create', [RegionalManagerController::class, 'createRegionalManager'])->name('create');
+            Route::post('/create', [RegionalManagerController::class, 'storeRegionalManager'])->name('store');
+            Route::get('/{id}/edit', [RegionalManagerController::class, 'editRegionalManager'])->name('edit');
+            Route::put('/{id}', [RegionalManagerController::class, 'updateRegionalManager'])->name('update');
+            Route::delete('/{id}', [RegionalManagerController::class, 'deleteRegionalManager'])->name('delete');
+        });
+    });
+
+    // ============================================
+    // ADMIN + STATE + REGIONAL MANAGER (Role IDs: 1, 2, 3)
+    // ============================================
+    Route::middleware(['role:1,2,3'])->group(function () {
+        // Project Manager Routes
+        Route::prefix('admin/project-manager')->name('admin.project-manager.')->group(function () {
+            Route::get('/', [ProjectManagerController::class, 'listProjectManagers'])->name('list');
+            Route::get('/create', [ProjectManagerController::class, 'createProjectManager'])->name('create');
+            Route::post('/create', [ProjectManagerController::class, 'storeProjectManager'])->name('store');
+            Route::get('/{id}/edit', [ProjectManagerController::class, 'editProjectManager'])->name('edit');
+            Route::put('/{id}', [ProjectManagerController::class, 'updateProjectManager'])->name('update');
+            Route::delete('/{id}', [ProjectManagerController::class, 'deleteProjectManager'])->name('delete');
+        });
+    });
+
+    // ============================================
+    // ALL MANAGERS (Role IDs: 1, 2, 3, 4)
+    // ============================================
+    Route::middleware(['role:1,2,3,4'])->group(function () {
+        // Anganwadi Operator Routes
+        Route::prefix('admin/anganwadi-operator')->name('admin.anganwadi-operator.')->group(function () {
+            Route::get('/', [AnganwadiOperatorController::class, 'listAnganwadiOperators'])->name('list');
+            Route::get('/create', [AnganwadiOperatorController::class, 'createAnganwadiOperator'])->name('create');
+            Route::post('/create', [AnganwadiOperatorController::class, 'storeAnganwadiOperator'])->name('store');
+            Route::get('/{id}/edit', [AnganwadiOperatorController::class, 'editAnganwadiOperator'])->name('edit');
+            Route::put('/{id}', [AnganwadiOperatorController::class, 'updateAnganwadiOperator'])->name('update');
+            Route::delete('/{id}', [AnganwadiOperatorController::class, 'deleteAnganwadiOperator'])->name('delete');
+        });
+    });
+
+    // ============================================
+    // ROLE-SPECIFIC DASHBOARDS
+    // ============================================
     
-    // regional-manager
-    Route::get('/admin/regional-manager', [RegionalManagerController::class, 'listRegionalManager'])->name('admin.regional-manager.list');
-    Route::delete('/admin/regional-manager/{id}', [RegionalManagerController::class,'deleteRegionalManager'])->name('admin.regional-manager.delete');
-    Route::get('/admin/regional-manager/create', [RegionalManagerController::class,'createRegionalManager'])->name('admin.regional-manager.create'); 
-    Route::post('/admin/regional-manager/create', [RegionalManagerController::class,'storeRegionalManager'])->name('admin.regional-manager.store');
-    Route::get('/admin/regional-manager', [RegionalManagerController::class, 'listRegionalManagers'])->name('admin.regional-manager.list');
-    Route::delete('/admin/regional-manager/{id}', [RegionalManagerController::class,'deleteRegionalManager'])->name('admin.regional-manager.delete'); 
-    Route::get('/admin/regional-manager/{id}/edit', [RegionalManagerController::class,'editRegionalManager'])->name('admin.regional-manager.edit');
-    Route::put('/admin/regional-manager/{id}', [RegionalManagerController::class,'updateRegionalManager'])->name('admin.regional-manager.update');
+    // State Manager Dashboard (Role ID: 2)
+    Route::middleware(['role:2'])->group(function () {
+        Route::get('/state-manager/dashboard', [StateManagerDashboardController::class, 'index'])
+            ->name('state-manager.dashboard');
+    });
 
-    // project-manager
-    Route::get('/admin/project-manager', [ProjectManagerController::class, 'listProjectManager'])->name('admin.project-manager.list');
-    Route::delete('/admin/project-manager/{id}', [ProjectManagerController::class,'deleteProjectManager'])->name('admin.project-manager.delete');
-    Route::get('/admin/project-manager/create', [ProjectManagerController::class,'createProjectManager'])->name('admin.project-manager.create'); 
-    Route::post('/admin/project-manager/create', [ProjectManagerController::class,'storeProjectManager'])->name('admin.project-manager.store');
-    Route::get('/admin/project-manager', [ProjectManagerController::class, 'listProjectManagers'])->name('admin.project-manager.list');
-    Route::delete('/admin/project-manager/{id}', [ProjectManagerController::class,'deleteProjectManager'])->name('admin.project-manager.delete'); 
-    Route::get('/admin/project-manager/{id}/edit', [ProjectManagerController::class,'editProjectManager'])->name('admin.project-manager.edit');
-    Route::put('/admin/project-manager/{id}', [ProjectManagerController::class,'updateProjectManager'])->name('admin.project-manager.update');
+    // Regional Manager Dashboard (Role ID: 3)
+    Route::middleware(['role:3'])->group(function () {
+        Route::get('/regional-manager/dashboard', [RegionalManagerDashboardController::class, 'index'])
+            ->name('regional-manager.dashboard');
+    });
 
-    // anganwadi-operator
-    Route::get('/admin/anganwadi-operator', [AnganwadiOperatorController::class, 'listAnganwadiOperator'])->name('admin.anganwadi-operator.list');
-    Route::delete('/admin/anganwadi-operator/{id}', [AnganwadiOperatorController::class,'deleteAnganwadiOperator'])->name('admin.anganwadi-operator.delete');
-    Route::get('/admin/anganwadi-operator/create', [AnganwadiOperatorController::class,'createAnganwadiOperator'])->name('admin.anganwadi-operator.create'); 
-    Route::post('/admin/anganwadi-operator/create', [AnganwadiOperatorController::class,'storeAnganwadiOperator'])->name('admin.anganwadi-operator.store');
-    Route::get('/admin/anganwadi-operator', [AnganwadiOperatorController::class, 'listAnganwadiOperators'])->name('admin.anganwadi-operator.list');
-    Route::delete('/admin/anganwadi-operator/{id}', [AnganwadiOperatorController::class,'deleteAnganwadiOperator'])->name('admin.anganwadi-operator.delete'); 
-    Route::get('/admin/anganwadi-operator/{id}/edit', [AnganwadiOperatorController::class,'editAnganwadiOperator'])->name('admin.anganwadi-operator.edit');
-    Route::put('/admin/anganwadi-operator/{id}', [AnganwadiOperatorController::class,'updateAnganwadiOperator'])->name('admin.anganwadi-operator.update');
-});
-
-Route::middleware(['auth:admin', CheckRole::class . ':2'])->group(function () {
-    Route::get('/state-manager/dashboard', [StateManagerDashboardController::class, 'index'])->name('state-manager.dashboard');
-});
-Route::middleware(['auth:admin', CheckRole::class . ':3'])->group(function () {
-    Route::get('/regional-manager/dashboard', [RegionalManagerDashboardController::class, 'index'])->name('regional-manager.dashboard');
-});
-
-Route::middleware(['auth:admin', CheckRole::class . ':4'])->group(function () {
-    Route::get('/project-manager/dashboard', [ProjectManagerDashboardController::class, 'index'])->name('project-manager.dashboard');
-});
-
-Route::middleware(['auth:admin', CheckRole::class . ':5'])->group(function () {
-    Route::get('/anganwadi-operator/dashboard', [AnganwadiOperatorDashboardController::class, 'index'])->name('anganwadi-operator.dashboard');
+    // Project Manager Dashboard (Role ID: 4)
+    Route::middleware(['role:4'])->group(function () {
+        Route::get('/project-manager/dashboard', [ProjectManagerDashboardController::class, 'index'])
+            ->name('project-manager.dashboard');
+    });
 });

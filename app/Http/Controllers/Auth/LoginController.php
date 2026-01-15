@@ -16,6 +16,7 @@ class LoginController extends Controller
         return Auth::guard('admin');
     }
     
+
     public function showLoginForm()
     {
         return view('admin.login');
@@ -32,7 +33,7 @@ class LoginController extends Controller
          $user = Admin::where('email', $request->email)->first();
 
         
-        // Attempt login using admin guard (covers all roles)
+        // Attempt login using admin guard 
             if (Auth::guard('admin')->attempt($request->only('email', 'password'))) {
                 $user = Auth::guard('admin')->user();
 

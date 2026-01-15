@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
+use Laravel\Sanctum\HasApiTokens;
 
 class Admin extends Authenticatable
 {
-    use Notifiable;
+    use HasApiTokens, Notifiable;
 
     protected $guard = 'admin'; 
 
@@ -22,6 +23,7 @@ class Admin extends Authenticatable
         'state_id',
         'regional_id',
         'project_id',
+        'otp',
     ];
 
     protected $hidden = [
@@ -48,12 +50,11 @@ class Admin extends Authenticatable
             1 => 'Admin',
             2 => 'State Manager',
             3 => 'Regional Manager',
-            4 => 'Project Manager',
+            4 => 'Project Manager,',
             5 => 'Anganwadi Operator',
         ];
 
         return $roles[$this->role_id] ?? 'Unknown';
     }
-    
 
 }
